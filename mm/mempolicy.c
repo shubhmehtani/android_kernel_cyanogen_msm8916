@@ -1549,6 +1549,10 @@ asmlinkage long compat_sys_set_mempolicy(int mode, compat_ulong_t __user *nmask,
 			return -EFAULT;
 		nm = compat_alloc_user_space(alloc_size);
 		if (copy_to_user(nm, bm, alloc_size))
+		if(compat_get_bitmap(bm, nmask, nr_bits))
+			return -EFAULT;
+		nm = compat_alloc_user_space(alloc_size);
+		if(copy_to_user(nm, bm, alloc_size))
 			return -EFAULT;
 	}
 
@@ -1571,6 +1575,10 @@ asmlinkage long compat_sys_mbind(compat_ulong_t start, compat_ulong_t len,
 			return -EFAULT;
 		nm = compat_alloc_user_space(alloc_size);
 		if (copy_to_user(nm, nodes_addr(bm), alloc_size))
+		if(compat_get_bitmap(nodes_addr(bm), nmask, nr_bits))
+			return -EFAULT;
+		nm = compat_alloc_user_space(alloc_size);
+		if(copy_to_user(nm, nodes_addr(bm), alloc_size))
 			return -EFAULT;
 	}
 
